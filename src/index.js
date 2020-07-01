@@ -103,7 +103,7 @@ function displayComment(commentObj){
         fetch(`http://localhost:3000/comments/${e.target.dataset.id}`, {method: 'DELETE'})
         .then(resp => resp.json())
         .then(commentObj => {
-            liTag.remove()
+            liTag.remove()  //pessimistic removal of comment
         })
      })
 }
