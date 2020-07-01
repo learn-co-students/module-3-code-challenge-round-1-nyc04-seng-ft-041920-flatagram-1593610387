@@ -40,13 +40,14 @@ function renderOneComment(comment){
   let commentList = document.querySelector(".comments")
   // create an li for each comment and append it to the ul
   let commentLi = document.createElement("li");
-  commentLi.textContent = comment.content
+  commentLi.innerHTML = `<button class="delete-button" data-id="${comment.id}">X</button>  ${comment.content}`
   commentList.append(commentLi) 
   // clear the comment input field if applicable
   document.querySelector(".comment-input").value = ""
   
-  commentLi.addEventListener("click", function(e){
-    console.log(e.target)
+  // delete comment event listener
+  let deleteButton = commentLi.querySelector(".delete-button")
+  deleteButton.addEventListener("click", function(e){
     deleteComment(comment.id, e.target)
   })
 }
@@ -88,12 +89,13 @@ function postComment(imageId, comment){
 }
 
 // DELETE /comments/:id
-function deleteComment(commentId, commentElement){
+function deleteComment(commentId, targetElement){
   fetch(`http://localhost:3000/comments/${commentId}`, {
     method: 'DELETE'
   })
   .then(r => r.json())
-  .then(commentElement.remove())
+  // remove the li that holds the button and comment
+  .then(targetElement.parentElement.remove())
 }
 
 
