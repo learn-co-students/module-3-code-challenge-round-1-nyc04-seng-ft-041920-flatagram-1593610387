@@ -44,14 +44,43 @@ function renderPost(postData) {
             content: commentContent
         }
 
-        renderComment(newComment)
+        // renderComment(newComment)
+
+        fetch("http://localhost:3000/comments", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "imageId": newComment.imageId,
+                "content": newComment.content
+            })
+        })
+            .then(r => r.json())
+            .then(newComment => {
+                renderComment(newComment)
+            })
     })
 }
 
 function renderComment(commentInstance) {
     const commentLine = document.createElement("li")
+    const deleteButton = document.createElement("button")
     commentLine.textContent = `${commentInstance.content}`
+    deleteButton.textContent = "Delete"
     commentPlaceholder.append(commentLine)
+    commentLine.append(deleteButton)
+
+    deleteButton.addEventListener("click", event => {
+        commentDeleted = event.target.closest("li")
+        commentPlaceholder.removeChild(commentDeleted)
+        // console.log(commentInstance)
+        fetch(`http://localhost:3000/comments/${commentInstance.id}`, {
+            method: 'DELETE'
+        })
+            .then(r => r.json())
+            .then(console.log)
+    })
 }
 
 // Initialize
