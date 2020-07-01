@@ -8,7 +8,6 @@ function fetchPost() {
         return res.json()
     })
     .then(function(postObj) {
-        console.log(postObj)
         renderPost(postObj)
     })
 }
@@ -94,12 +93,30 @@ function postComment(newComment) {
     })
 }
 
+function deleteComment(comment) {
+    configObj = {
+        method: "DELETE"
+    }
+    fetch(`http://localhost:3000/comments/${comment.id}`, configObj)
+    .then(function(res){
+        return res.json()
+    })
+    .then(function(){
+        fetchPost()
+    })
+}
+
 //helper to loop through comments arr
 function renderComments(commentUl, commentsArr) {
     commentsArr.forEach(function(comment){
         const commentLi = document.createElement("li")
         commentLi.innerHTML = `${comment.content} <button class="delete-btn"> delete me</button>`
         commentUl.append(commentLi)
+        
+        const deleteButton = commentLi.querySelector(".delete-btn")
+        deleteButton.addEventListener("click", function() {
+            deleteComment(comment)
+        })
     })
 }
 
