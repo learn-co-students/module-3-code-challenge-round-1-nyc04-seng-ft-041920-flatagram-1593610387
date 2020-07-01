@@ -1,11 +1,5 @@
 // DOM Elements
 const imageCard = document.querySelector(".image-card")
-// const imageContainer = document.querySelector(".image-container")
-
-console.log(imageCard)
-// Event Handlers
-
-
 
 // Render Helpers
 function renderCardData(cardObj){
@@ -22,9 +16,8 @@ function renderCardData(cardObj){
     <button class="comment-button" type="submit">Post</button>
   </form>`
 
-  //after innerHTML add the comments by appending
+  //after innerHTML is created, add the comments by appending
   cardObj.comments.forEach(renderOneComment)
-  // renderComments(cardObj.comments)
 
   // nested event listener for liking
   const likeBtn = document.querySelector(".like-button")
@@ -39,16 +32,9 @@ function renderCardData(cardObj){
   commentForm.addEventListener("submit", function(e){
     e.preventDefault()
     // post to /comments
-    // console.log(e.target.comment.value)
     postComment(cardObj.id, e.target.comment.value)
   })
 }
-
-// function renderComments(commentsArray){
-//   let commentList = document.querySelector(".comments")
-
-//   commentsArray.forEach(renderOneComment)
-// }
 
 function renderOneComment(comment){
   let commentList = document.querySelector(".comments")
@@ -56,10 +42,8 @@ function renderOneComment(comment){
   let commentLi = document.createElement("li");
   commentLi.textContent = comment.content
   commentList.append(commentLi) 
-  // clear the input field if applicable
+  // clear the comment input field if applicable
   document.querySelector(".comment-input").value = ""
-
-  
 }
 
 // PATCH (doesn't return comment details)
@@ -76,6 +60,7 @@ function increaseLikes(numLikes, likesSpan){
   })
   .then(r => r.json())
   .then(imageData =>
+    // update the DOM (pessimistic rendering)
     likesSpan.textContent = `${imageData.likes} likes`
   )
 }
@@ -101,7 +86,4 @@ function postComment(imageId, comment){
 // GET
 fetch("http://localhost:3000/images/1")
 .then(r => r.json())
-.then(cardObj =>{
-  renderCardData(cardObj)
-  
-})
+.then(renderCardData)
