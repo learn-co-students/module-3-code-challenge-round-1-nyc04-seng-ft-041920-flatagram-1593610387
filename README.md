@@ -41,9 +41,8 @@ These deliverables are not required to pass the code challenge, but if you have 
 
 As a user, I can:
 
-- Downvote an image
-**Need to find a downvote icon?**
-- Still see the comments written after reloading the page
+- [x] Downvote an image
+- [x] Still see the comments written after reloading the page
   > For this one, you want to make a POST request to the `/comments` endpoint.
   > Your comment object must have an `imageId` key with a value of `1` for it to work.
 - Delete a comment

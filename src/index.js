@@ -17,15 +17,20 @@ fetch('http://localhost:3000/comments')
 form.addEventListener('submit', e => {
   e.preventDefault();
   let input = e.target.comment.value;
-  let likeLi = document.createElement('li')
-  likeLi.textContent = input
-  commentsList.appendChild(likeLi)
+  fetch('http://localhost:3000/comments', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      imageId: 1,
+      content: `${input}`
+    })
+  }).then(resp => resp.json()).then(comment => console.log(comment))
+
+  comments(input)
   form.reset();
 })
-
-function postComments(item) {
-
-}
 
 function renderImage(item) {
   card.dataset.id = item.id
@@ -67,26 +72,13 @@ function renderImage(item) {
 
 function renderComments(item) {
   item.forEach(comment => {
-    comments(comment)
+    let content = comment.content
+    comments(content)
   })
 }
 
-function comments(item, ) {
-  // bout the least dryest thing im about to do
-  // welp SOS
+function comments(item) {
   let likeLi = document.createElement('li')
-  likeLi.textContent = item.content
+  likeLi.textContent = item
   commentsList.appendChild(likeLi)
 }
-
-// so having to grab the index here VS iterating over each item with forEach
-
-// on refactor: can have a render many, then another function to iterate over to render a single one -- this is an ugly brute force solution but it's the most time friendly bc IT'S JUST ONE DOGGO... WHY CAN'T WE ADD OUR OWN?????
-
-// like you would have a function here normally to render multiple, but you just have one image here
-
-// PROBLEM HERE: IT KEEPS REFRESHING on like, SO WHAT DO???
-// does it keep refreshing cause it's in the function to render it from the fetch
-// nope need to ask why it keeps refreshing :(
-// if i take it out of this function, i'll get to use the dataset to find the exact element it's doing this for
-// it refreshie bc live server :(
