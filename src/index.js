@@ -13,11 +13,6 @@ fetch(`http://localhost:3000/images`)
     .then(imagesInfo => {
         renderAllImages(imagesInfo)
     })
-// fetch(`http://localhost:3000/comments`)
-//     .then(response => response.json())
-//     .then(comment => {
-//         renderOneComment(comment)    
-// })
 
 function renderOneImage(element){
     fetch(`http://localhost:3000/images/${element.id}`)
@@ -77,24 +72,28 @@ function renderOneImage(element){
         event.preventDefault()
         const newComment = document.createElement("li")
         newComment.innerText = event.target.comment.value
+        fetch('http://localhost:3000/comments', {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                imageId: 1,
+                content: newComment.innerText
+            }),
+            })
+            .then(response => response.json())
+            .then(data => {
+            console.log('Success:', data);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            });
         commentList.append(newComment)
         commentForm.reset()
 
     })
 }
-// function renderOneComment(comment){
-
-//         const newComment = document.createElement("li")
-//         newComment.innerText = comment.content
-//         commentList.append(newComment)
-// }
-
-// function renderComments(comments){
-//     commentList.innerText = " "
-//     comments.forEach(comment => {
-//         renderOneComment(comment)
-//     })
-// }
 
 function renderAllImages(imagesInfo){
     imagesInfo.forEach(element => {
