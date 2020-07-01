@@ -94,13 +94,19 @@ function app() {
       <img src="${data.image}" class="image" />
       <div class="likes-section">
         <span class="likes"> <span class="likes-count">${data.likes}</span> likes</span>
-        <button class="like-button">♥</button>
+        <div class="like-buttons">
+          <button class="like-button"><i class="fa fa-heart" aria-hidden="true"></i></button>
+          <button class="like-button"><i class="fa fa-heart-o" aria-hidden="true"></i></button>
+        <div>
       </div>
     `
-    const likeBtn = imageBox.querySelector('.like-button')
+    const likeBtns = imageBox.querySelector('.like-buttons')
     const spanCount = imageBox.querySelector('.likes-count')
-    likeBtn.addEventListener('click', (event) => {
-      spanCount.innerText = parseInt(spanCount.innerText) + 1
+
+    likeBtns.addEventListener('click', (event) => {
+      event.target.matches(".fa-heart-o") ? 
+              spanCount.innerText = parseInt(spanCount.innerText) - 1 : 
+              spanCount.innerText = parseInt(spanCount.innerText) + 1
       const commentObj = { 
         "id": 1,
         "title": "Woofing those bugs away",
