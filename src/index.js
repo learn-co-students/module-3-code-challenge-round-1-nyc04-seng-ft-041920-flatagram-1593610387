@@ -18,12 +18,9 @@ fetch('http://localhost:3000/images/1')
     imgTag.src = data.image 
     likesSpan.innerText = `${data.likes} likes`
     data.comments.forEach(comment => {
-        // const liTag = document.createElement('li')
-        // liTag.innerText = comment.content 
-        // commentsContainer.append(liTag)
         displayComment(comment)
     })
-    //adding item id to comment form 
+    //adding item id to comment form
     commentForm.dataset.id = data.id 
 })
 
@@ -95,7 +92,6 @@ commentForm.addEventListener('submit', e => {
 
 
 //helper method to display comment 
-
 function displayComment(commentObj){
     const liTag = document.createElement('li')
     liTag.innerText = commentObj.content
