@@ -41,8 +41,7 @@ function renderPost(postObj) {
     //add likes
     const likeButton = imageCard.querySelector(".like-button")
     likeButton.addEventListener("click", function() {
-        const likeSpan = document.querySelector(".likes")
-        likeObj = {"likes": parseInt(likeSpan.textContent) + 1}
+        likeObj = {"likes": postObj.likes + 1}
         patchLike(postObj)
     })
 
@@ -54,7 +53,7 @@ function renderPost(postObj) {
             "imageId": postObj.id,
             "content": commentForm.comment.value
         }
-        postComment(commentObj, commentUl)
+        postComment(commentObj)
     })
 }
 
@@ -73,11 +72,11 @@ function patchLike(postObj) {
     })
     .then(function(newLike){
         console.log(newLike)
-        updateLike(newLike)
+        fetchPost()
     })
 }
 
-function postComment(newComment, commentUl) {
+function postComment(newComment) {
     configObj = {
         method: "POST",
         headers: {
@@ -91,7 +90,7 @@ function postComment(newComment, commentUl) {
     })
     .then(function(newComment){
         console.log(newComment)
-        renderNewComment(newComment, commentUl)
+        fetchPost()
     })
 }
 
@@ -99,22 +98,22 @@ function postComment(newComment, commentUl) {
 function renderComments(commentUl, commentsArr) {
     commentsArr.forEach(function(comment){
         const commentLi = document.createElement("li")
-        commentLi.textContent = comment.content
+        commentLi.innerHTML = `${comment.content} <button class="delete-btn"> delete me</button>`
         commentUl.append(commentLi)
     })
 }
 
 //update DOM with like
-function updateLike(newLike) {
-    const likeSpan = document.querySelector(".likes")
-    const likeNum = parseInt(likeSpan.textContent)
-    likeSpan.textContent = `${likeNum + 1} likes`
-}
+// function updateLike(newLike) {
+//     const likeSpan = document.querySelector(".likes")
+//     const likeNum = parseInt(likeSpan.textContent)
+//     likeSpan.textContent = `${likeNum + 1} likes`
+// }
 
 //update DOM with comment
-function renderNewComment(newComment, commentUl) {
-    const newCommentLi = document.createElement("li")
-    newCommentLi.textContent = newComment.content
-    commentUl.append(newCommentLi)
-}
+// function renderNewComment(newComment, commentUl) {
+//     const newCommentLi = document.createElement("li")
+//     newCommentLi.innerHTML = `${newComment.content} <button class="delete-btn"> delete me</button>`
+//     commentUl.append(newCommentLi)
+// }
 
