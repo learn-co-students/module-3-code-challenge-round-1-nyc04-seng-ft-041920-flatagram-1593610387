@@ -2,6 +2,18 @@
 const commentForm = document.querySelector('.comment-form')
 // console.log(commentForm)
 
+function deleteComment(comment_id) {
+  fetch(`http://localhost:3000/comments/${comment_id}`, {
+  method: "DELETE",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json"
+  }
+})
+.then(resp => resp.json())
+.then(comment => {
+  console.log("Success!", comment)
+})}
 
 function newComment(newContent) {
   fetch("http://localhost:3000/comments", {
@@ -45,9 +57,21 @@ function displayImage(data) {
 
 function displayComment(comment) {
   const ulContainer = document.querySelector('.comments')
-  const liComment = document.createElement('li')
-  liComment.innerText = comment.content
-  ulContainer.append(liComment)
+  const commentContainer = document.createElement('div')
+  commentContainer.className = "comment-container"
+  commentContainer.innerHTML = `
+    <li>${comment.content}</li> 
+    <div class="delete-btn">
+      <i class="fa fa-trash" aria-hidden="true"></i> 
+    <div>
+  `
+  ulContainer.append(commentContainer)
+
+  const deleteBtn = commentContainer.querySelector('.delete-btn')
+  deleteBtn.addEventListener('click', (event) => {
+    event.target.closest('.comment-container').remove()
+    deleteComment(comment.id)
+  })
 }
 
 function renderComments(comments) {
