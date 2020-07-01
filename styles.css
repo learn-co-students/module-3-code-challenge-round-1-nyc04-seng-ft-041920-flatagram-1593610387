@@ -53,7 +53,7 @@ body {
   font-weight: 600;
 }
 
-.like-button {
+.like-button, .dislike-button{
   color: rgb(255, 127, 80);
   font-size: 1.5rem;
   border: none;
