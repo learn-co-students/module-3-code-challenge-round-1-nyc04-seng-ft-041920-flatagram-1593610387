@@ -40,6 +40,7 @@ function renderImg(img){
   likes.textContent = `${img.likes} likes`
 
   addLikeEvent(img)
+  disLikeEvent(img)
 }
 
 function renderComment(comment){
@@ -51,24 +52,28 @@ function renderComment(comment){
 
 //passimistic update likes
 function renderUpdatedLikes(img){
+  console.log(img)
   const card = document.querySelector(`.image-card[data-id='${img.id}']`)
   const likes = card.querySelector('.likes')
   likes.textContent = `${img.likes} likes`
 }
 
 // API requets
-function patchLikesReq(img){
+function patchLikesReq(img, likesObj){
   const url = `${imgUrl}/${img.id}`
   const configObj ={
     method : 'PATCH',
     headers : {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({"likes": img.likes+1})
+    body: JSON.stringify(likesObj)
   }
   fetch(url,configObj)
     .then(r => r.json())
-    .then(renderUpdatedLikes)
+    .then(newImg => {
+      img.likes = newImg.likes
+      renderUpdatedLikes(newImg)
+    })
 }
 
 function updateComment(newCommentObj){
@@ -99,7 +104,18 @@ function addLikeEvent(img){
     /**end****** */
     
     //fetch patch for image - likes update
-    patchLikesReq(img)
+    const likesObj = {"likes": img.likes+1}
+    patchLikesReq(img, likesObj)
+  })
+}
+
+function disLikeEvent(img){
+  const dislikeBtn = card.querySelector('.dislike-button')
+  dislikeBtn.addEventListener('click', e => {
+
+    const likesObj = {"likes": img.likes-1}
+    //fetch patch for image - likes update
+    patchLikesReq(img,likesObj)
   })
 }
 
