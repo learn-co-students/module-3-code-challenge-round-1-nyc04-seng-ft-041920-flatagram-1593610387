@@ -46,8 +46,21 @@ function renderImg(img){
 function renderComment(comment){
   const commentUl = card.querySelector('.comments')
   const commentLi = document.createElement('li')
+  const deleteBtn = document.createElement('button')
+  deleteBtn.className = 'deleteBtn'
+  deleteBtn.innerText = 'x'
   commentLi.innerText = comment.content
+  commentLi.append(deleteBtn)
   commentUl.append(commentLi)  
+  
+  deleteBtn.addEventListener('click', e => {
+    console.log(e.target)
+    const url = `${commentUrl}/${comment.id}`
+    fetch(url, {method: "DELETE"})
+      .then(r => r.json())
+      .then(console.log)
+    e.target.parentElement.remove()
+  })
 }
 
 //passimistic update likes
@@ -118,6 +131,7 @@ function disLikeEvent(img){
     patchLikesReq(img,likesObj)
   })
 }
+
 
 const commentForm = document.querySelector('.comment-form')
 commentForm.addEventListener('submit', e => {
