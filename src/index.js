@@ -44,6 +44,11 @@ function renderOneComment(comment){
   commentList.append(commentLi) 
   // clear the comment input field if applicable
   document.querySelector(".comment-input").value = ""
+  
+  commentLi.addEventListener("click", function(e){
+    console.log(e.target)
+    deleteComment(comment.id, e.target)
+  })
 }
 
 // PATCH (doesn't return comment details)
@@ -81,6 +86,16 @@ function postComment(imageId, comment){
   .then(r => r.json())
   .then(renderOneComment)
 }
+
+// DELETE /comments/:id
+function deleteComment(commentId, commentElement){
+  fetch(`http://localhost:3000/comments/${commentId}`, {
+    method: 'DELETE'
+  })
+  .then(r => r.json())
+  .then(commentElement.remove())
+}
+
 
 // Initialization
 // GET
