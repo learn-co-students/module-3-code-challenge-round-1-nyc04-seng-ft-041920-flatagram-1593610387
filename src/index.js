@@ -1,112 +1,96 @@
-// write your code here
-
+// Images
 const imgContainer = document.querySelector(".image-container");
 const imgDiv = document.querySelector(".image-card");
+const imgTitle = document.querySelector(".title");
+const img = document.querySelector(".image");
+// Likes
 const likesDiv = document.querySelector(".likes-section");
+const likesSpan = document.querySelector('.likes');
+const likeButton = document.querySelector("button.like-button");
+// Comments
 const ulComments = document.querySelector(".comments");
 const postComment = document.querySelector(".comment-form");
-const likeButton = document.querySelector("button.like-button");
+const commentInput = document.querySelector(".comment-input")
+
 
 // Displays the page data
-function populatePage(){
-    fetch(`http://localhost:3000/images`)
+fetch(`http://localhost:3000/images/1`)
     .then(resp => resp.json())
-    .then(json => populatePageData(json[0]));
-}
+    .then(json => populatePageData(json));
 
 // Displays Comments
-function grabComments(){
+function grabComments(comment){
     // I wish we could just make our own web page lol
     while (ulComments.firstChild) {
         ulComments.removeChild(ulComments.firstChild);
     }
-    // Grabs comments API
-    fetch(`http://localhost:3000/comments`)
-    .then(resp => resp.json())
-    .then(json => populateMultipleComments(json));
+
+    // Displays the comments
+    populateMultipleComments(comment)
 }
 
 // Creates a single Comment
 function populateSingleComment(comment){
     let newLi = document.createElement("li");
-    newLi.innerText = comment.content;
+    newLi.innerText = comment;
 
     ulComments.appendChild(newLi);
 }
 
 // Displays Multiple comments
 function populateMultipleComments(comments){
-    comments.forEach(populateSingleComment);
+    comments.forEach(x => {
+        populateSingleComment(x.content)
+    });
 }
 
 // Populates page logic
 function populatePageData(x){
-
     // Shows Image Div
-    imgDiv.innerHTML =
-    `
-    <h2 class="title">${x.title}</h2>
-    <img src="${x.image}" class="image" />
-    `
+    imgTitle.textContent = x.title;
+    img.src = x.image;
 
-    // Shows Likes Div
-    likesDiv.innerHTML =
-    `
-    <span class="likes">${x.likes} likes</span>
-    <button class="like-button">♥</button>
-    `
-
-    postComment.innerHTML=
-    `
-    <input
-        class="comment-input"
-        type="text"
-        name="comment"
-        placeholder="Add a comment..."
-    />
-
-    <button class="comment-button" type="submit">Post</button>
-    `   
-
-    // Creates the final Image Div
-    imgDiv.appendChild(likesDiv);
-    imgDiv.appendChild(ulComments);
-    imgDiv.appendChild(postComment);
-
-    // Appennds Final Div to main container
-    imgContainer.appendChild(imgDiv);
+    // Shows Likes
+    likesSpan.innerText = `${x.likes} likes`;
 
     // Displays Comments
-    grabComments()
-    //Updates Likes
-    updateLikes()
+    grabComments(x.comments)
 
+    // Increases Likes
+    increasesLikes()
 }
 
-// Updates like by hitting like button
-function updateLikes(){
-    console.log(likeButton)
-    likeButton.addEventListener("click", e => {
-
-        const likesObj = {
-            "likes": e.target.likes.value
-        }
-
-        console.log(likesObj)
+function increasesLikes(){
+    likeButton.addEventListener('click', () => {
+        let likeInc = parseInt(likesSpan.innerText) + 1
+        likesSpan.innerText = `${likeInc} likes`
     
-        fetch(`http://localhost:3000/images/1`, {
-            method: "PATCH",
+        fetch('http://localhost:3000/images/1', { 
+            method: 'PATCH',
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": 'application/json'
             },
-            body: JSON.stringify(likesObj)
-        })
+            body: JSON.stringify({"likes": likeInc})
+        }
+        )
+        .then(resp => resp.json())
+        .then(console.log)
     })
-    .then(resp => resp.json())
-    .then(json => json.likes++);;
-
-
 }
 
-
-populatePage()
+// Adds Comments
+// postComment.addEventListener("submit", (e) => {
+//     e.preventDefault()
+//     // console.log(commentInput.value)
+//     populateSingleComment(commentInput.value)
+//     fetch('http://localhost:3000/comments', { 
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": 'application/json'
+//         },
+//         body: JSON.stringify({"likes": likeInc})
+//     }
+//     )
+//     .then(resp => resp.json())
+//     .then(console.log)
+// });
