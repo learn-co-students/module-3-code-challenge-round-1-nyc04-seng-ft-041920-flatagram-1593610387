@@ -3,6 +3,10 @@
 
 const imageContainer = document.querySelector(".image-container");
 
+const commentsUl = imageContainer.querySelector(".comments");
+
+const likes = imageContainer.querySelector(".likes");
+
 fetch("http://localhost:3000/images/1")
   .then(function (response) {
     return response.json();
@@ -15,22 +19,25 @@ fetch("http://localhost:3000/images/1")
     const image = imageContainer.querySelector(".image");
     image.setAttribute("src", json.image);
 
-    const likes = imageContainer.querySelector(".likes");
     likes.innerHTML = `<span>${json.likes}</span> likes`;
 
-    const commentsUl = imageContainer.querySelector(".comments");
     commentsUl.innerHTML = "";
     json.comments.forEach(function (comment) {
       const commentLi = document.createElement("li");
       commentLi.innerText = comment.content;
+      commentLi.innerHTML += "<button>delete</button>";
 
       commentsUl.append(commentLi);
+
+      const deleteBtn = commentLi.querySelector("button");
+      deleteBtn.addEventListener("click", function (event) {
+        commentLi.remove();
+      });
     });
   });
 
 const likeButton = imageContainer.querySelector(".like-button");
 likeButton.addEventListener("click", function (event) {
-  const likes = imageContainer.querySelector(".likes");
   const likeNumberSpan = likes.querySelector("span");
   //   console.log(typeof likeNumberSpan.innerText);
 
@@ -53,8 +60,7 @@ const commentForm = imageContainer.querySelector(".comment-form");
 commentForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const commentsUl = imageContainer.querySelector(".comments");
-  commentsUl.innerHTML += `<li>${event.target.comment.value} </li>`;
+  commentsUl.innerHTML += `<li>${event.target.comment.value} <button>delete</button></li>`;
 
   fetch("http://localhost:3000/comments", {
     method: "POST",
