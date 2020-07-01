@@ -39,21 +39,20 @@ disLikeBtn.addEventListener('click', () => {
 
 //likes handling  
 function likesHandler(num){
-
     let likesNum = parseInt(likesSpan.innerText) + num
-        likesSpan.innerText = `${likesNum} likes`
-    
-        const config = {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify({"likes": likesNum})
-        }
+    likesSpan.innerText = `${likesNum} likes`
 
-        fetch('http://localhost:3000/images/1', config)
-        .then(resp => resp.json())
-        .then(console.log)
+    const config = {
+        method: 'PATCH',
+        headers: {
+            "Content-Type": 'application/json'
+        },
+        body: JSON.stringify({"likes": likesNum})
+    }
+
+    fetch('http://localhost:3000/images/1', config)
+    .then(resp => resp.json())
+    .then(console.log)
 }
 
   
