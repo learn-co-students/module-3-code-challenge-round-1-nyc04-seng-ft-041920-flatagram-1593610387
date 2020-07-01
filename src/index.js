@@ -1,1 +1,148 @@
 // write your code here
+const imgUrl = 'http://localhost:3000/images'
+const commentUrl = "http://localhost:3000/comments"
+
+const imgContainer = document.querySelector('.image-container')
+const card = document.querySelector('.image-card')
+
+/**initial render */
+getImgComment()
+
+function getImgComment(){
+  fetch(imgUrl)
+    .then(r => r.json())
+    .then(imgs => {
+      console.log(imgs)
+      imgs.forEach(img => {
+        renderImg(img)
+      });
+    })
+  
+    fetch(commentUrl)
+    .then(r => r.json())
+    .then(comments => {
+      console.log(comments)
+      comments.forEach(comment => {
+        renderComment(comment)
+      });
+    })
+}
+/*******************/
+
+//Render Helpers
+function renderImg(img){
+  const title = card.querySelector('.title')
+  const image = card.querySelector('img')
+  const likes = card.querySelector('.likes')
+  card.dataset.id = img.id
+  title.textContent = img.title
+  image.src = img.image
+  likes.textContent = `${img.likes} likes`
+
+  addLikeEvent(img)
+  disLikeEvent(img)
+}
+
+function renderComment(comment){
+  const commentUl = card.querySelector('.comments')
+  const commentLi = document.createElement('li')
+  const deleteBtn = document.createElement('button')
+  deleteBtn.className = 'deleteBtn'
+  deleteBtn.innerText = 'x'
+  commentLi.innerText = comment.content
+  commentLi.append(deleteBtn)
+  commentUl.append(commentLi)  
+  
+  deleteBtn.addEventListener('click', e => {
+    console.log(e.target)
+    const url = `${commentUrl}/${comment.id}`
+    fetch(url, {method: "DELETE"})
+      .then(r => r.json())
+      .then(console.log)
+    e.target.parentElement.remove()
+  })
+}
+
+//passimistic update likes
+function renderUpdatedLikes(img){
+  console.log(img)
+  const card = document.querySelector(`.image-card[data-id='${img.id}']`)
+  const likes = card.querySelector('.likes')
+  likes.textContent = `${img.likes} likes`
+}
+
+// API requets
+function patchLikesReq(img, likesObj){
+  const url = `${imgUrl}/${img.id}`
+  const configObj ={
+    method : 'PATCH',
+    headers : {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(likesObj)
+  }
+  fetch(url,configObj)
+    .then(r => r.json())
+    .then(newImg => {
+      img.likes = newImg.likes
+      renderUpdatedLikes(newImg)
+    })
+}
+
+function updateComment(newCommentObj){
+  const configObj ={
+    method : 'POST',
+    headers : {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(newCommentObj)
+  }
+
+  fetch(commentUrl,configObj)
+    .then(r => r.json())
+    .then(renderComment)
+}
+
+// Event Listeners
+
+function addLikeEvent(img){
+  const likeBtn = card.querySelector('.like-button')
+  const likes = card.querySelector('.likes')
+  likeBtn.addEventListener('click', e => {
+
+    /**optimistic update likes */
+    // let newlikes = parseInt(likes.innerText) + 1
+    // likes.innerText = `${newlikes} likes`
+    // img.likes = newlikes
+    /**end****** */
+    
+    //fetch patch for image - likes update
+    const likesObj = {"likes": img.likes+1}
+    patchLikesReq(img, likesObj)
+  })
+}
+
+function disLikeEvent(img){
+  const dislikeBtn = card.querySelector('.dislike-button')
+  dislikeBtn.addEventListener('click', e => {
+
+    const likesObj = {"likes": img.likes-1}
+    //fetch patch for image - likes update
+    patchLikesReq(img,likesObj)
+  })
+}
+
+
+const commentForm = document.querySelector('.comment-form')
+commentForm.addEventListener('submit', e => {
+  e.preventDefault()
+  let newCommentObj = {
+    "imageId": e.target.closest('.image-card').dataset.id,
+    "content": e.target.comment.value
+  }
+  // fetch POST fo comments
+  updateComment(newCommentObj)
+  commentForm.reset()
+})
+
+
