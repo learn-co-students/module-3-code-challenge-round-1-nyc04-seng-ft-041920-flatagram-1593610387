@@ -6,10 +6,9 @@ function renderCardData(cardObj){
   imageCard.innerHTML = `<h2 class="title">${cardObj.title}</h2>
   <img src="${cardObj.image}" class="image" alt="${cardObj.title}" />
   <div class="likes-section">
-  <button class="dislike-button">👎</button>
-  <span class="likes">${cardObj.likes} likes</span>
-  <button class="like-button">♥</button>
-
+    <button class="dislike-button">👎</button>
+    <span class="likes">${cardObj.likes} likes</span>
+    <button class="like-button">♥</button>
   </div>
   <ul class="comments">
   </ul>
@@ -22,22 +21,8 @@ function renderCardData(cardObj){
   cardObj.comments.forEach(renderOneComment)
 
   // event listener for liking/disliking
-  const likesSection = document.querySelector(".likes-section")
-  console.log(likesSection)
-  // const likeBtn = document.querySelector(".like-button")
-  const likesSpan = document.querySelector(".likes")
-  likesSection.addEventListener("click", function(e){
-    console.log(e.target)
-    if(e.target.matches(".like-button")){
-      cardObj.likes++
-    }
-    // dislike
-    else{
-      cardObj.likes--
-    }
-    // increase or decrease likes
-    updateLikes(cardObj.likes, likesSpan)
-  })
+  manageLikes(cardObj)
+
 
   // nested eventListener for Post
   const commentForm = document.querySelector(".comment-form")
@@ -61,6 +46,23 @@ function renderOneComment(comment){
   let deleteButton = commentLi.querySelector(".delete-button")
   deleteButton.addEventListener("click", function(e){
     deleteComment(comment.id, e.target)
+  })
+}
+
+function manageLikes(cardObj){
+  const likesSection = document.querySelector(".likes-section")
+  const likesSpan = document.querySelector(".likes")
+  likesSection.addEventListener("click", function(e){
+
+    if(e.target.matches(".like-button")){
+      cardObj.likes++
+    }
+    // .dislike-button
+    else{
+      cardObj.likes--
+    }
+    // increase or decrease likes (patch)
+    updateLikes(cardObj.likes, likesSpan)
   })
 }
 
