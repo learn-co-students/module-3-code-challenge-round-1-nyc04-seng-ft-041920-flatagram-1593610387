@@ -4,25 +4,24 @@
     <meta charset="utf-8" />
     <title>Flatagram</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="https://use.fontawesome.com/2722e28684.js"></script>
     <script defer type="text/javascript" src="src/index.js"></script>
   </head>
   <body>
+    
     <!-- logo -->
     <img class="logo" src="assets/flatagram-logo.png" />
 
     <!-- image card -->
     <div class="image-container">
       <div class="image-card">
-        <h2 class="title">Title of image goes here</h2>
-        <img src="./assets/image-placeholder.jpg" class="image" />
-        <div class="likes-section">
-          <span class="likes">0 likes</span>
-          <button class="like-button">♥</button>
+        <div id="image-box">
+        
+          <!-- add image info here -->
+
         </div>
         <ul class="comments">
-          <li>Get rid of these comments</li>
-          <li>And replace them with the real ones</li>
-          <li>From the server</li>
+            <!-- add comments here -->
         </ul>
         <form class="comment-form">
           <input
@@ -32,6 +31,7 @@
             placeholder="Add a comment..."
           />
           <button class="comment-button" type="submit">Post</button>
+          <i class='fas fa-heart-broken' aria-hidden="true"></i>
         </form>
       </div>
     </div>
