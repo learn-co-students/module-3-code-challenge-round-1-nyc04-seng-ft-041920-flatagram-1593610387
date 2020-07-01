@@ -32,6 +32,9 @@ fetch("http://localhost:3000/images/1")
       const deleteBtn = commentLi.querySelector("button");
       deleteBtn.addEventListener("click", function (event) {
         commentLi.remove();
+        fetch(`http://localhost:3000/comments/${comment.id}`, {
+          method: "DELETE",
+        });
       });
     });
   });
