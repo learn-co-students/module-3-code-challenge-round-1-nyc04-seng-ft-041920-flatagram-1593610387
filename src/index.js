@@ -72,7 +72,7 @@ function renderOneImage(element){
         event.preventDefault()
         const newComment = document.createElement("li")
         newComment.innerText = event.target.comment.value
-        fetch('http://localhost:3000/comments', {
+        fetch(`http://localhost:3000/comments`, {
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json',
@@ -101,6 +101,20 @@ function renderAllImages(imagesInfo){
     })   
 }
 
+fetch(`http://localhost:3000/comments`)
+    .then(response => response.json())
+    .then(commentsInfo => {
+        commentsInfo.forEach(element => {
+            renderOneComment (element)
+        })
+    })
+
+function renderOneComment (element){
+    const comment = document.createElement("li")
+    comment.innerText = element.content
+    commentList.append(comment)
+
+}
 //Advanced Deliverables
 const downVote = document.createElement("button")
 likesSection.append(downVote)
