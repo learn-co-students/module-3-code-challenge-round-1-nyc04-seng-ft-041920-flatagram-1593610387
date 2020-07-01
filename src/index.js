@@ -40,8 +40,16 @@ function renderPost(postObj) {
     //add likes
     const likeButton = imageCard.querySelector(".like-button")
     likeButton.addEventListener("click", function() {
-        likeObj = {"likes": postObj.likes + 1}
-        patchLike(postObj)
+        //right now this isn't ideal but, if this if statement was evaluating a specific
+        //users like on a post and whether one exists or not, this would work better
+        //original commit has initial incrementing like logic
+        if (postObj.likes === 0) {
+            likeObj = {"likes": postObj.likes + 1}
+        }
+        if (postObj.likes === 1) {
+            likeObj = {"likes": postObj.likes - 1}
+        }
+        patchLike(postObj, likeObj)
     })
 
     //add comments
@@ -57,7 +65,7 @@ function renderPost(postObj) {
 }
 
 
-function patchLike(postObj) {
+function patchLike(postObj, likeObj) {
     configObj = {
         method: "PATCH",
         headers: {
@@ -119,18 +127,4 @@ function renderComments(commentUl, commentsArr) {
         })
     })
 }
-
-//update DOM with like
-// function updateLike(newLike) {
-//     const likeSpan = document.querySelector(".likes")
-//     const likeNum = parseInt(likeSpan.textContent)
-//     likeSpan.textContent = `${likeNum + 1} likes`
-// }
-
-//update DOM with comment
-// function renderNewComment(newComment, commentUl) {
-//     const newCommentLi = document.createElement("li")
-//     newCommentLi.innerHTML = `${newComment.content} <button class="delete-btn"> delete me</button>`
-//     commentUl.append(newCommentLi)
-// }
 
