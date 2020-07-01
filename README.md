@@ -29,9 +29,9 @@ The endpoints you will need are:
 
 As a user, I can:
 
-- See the image received from the server, including its title, likes and comments when the page loads
-- Click on the heart icon to increase image likes, and still see them when I reload the page
-- Add a comment (no persistance needed)
+- [x] See the image received from the server, including its title, likes and comments when the page loads
+- [X] Click on the heart icon to increase image likes, and still see them when I reload the page
+- [x] Add a comment (no persistance needed)
 
 ## Advanced Deliverables
 
@@ -41,8 +41,8 @@ These deliverables are not required to pass the code challenge, but if you have 
 
 As a user, I can:
 
-- Downvote an image
-- Still see the comments written after reloading the page
+- [x] Downvote an image
+- [x] Still see the comments written after reloading the page
   > For this one, you want to make a POST request to the `/comments` endpoint.
   > Your comment object must have an `imageId` key with a value of `1` for it to work.
 - Delete a comment

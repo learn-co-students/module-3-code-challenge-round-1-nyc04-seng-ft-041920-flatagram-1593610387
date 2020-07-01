@@ -57,6 +57,7 @@ body {
   color: rgb(255, 127, 80);
   font-size: 1.5rem;
   border: none;
+  /* border: 1px solid red; */
   background: none;
   transition: color 300ms;
   cursor: pointer;
