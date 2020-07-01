@@ -3,13 +3,13 @@
 //Dom Elements
 const dogContainer = document.querySelector(".image-container");
 const commentForm = document.querySelector(".comment-form");
+const postComment = document.querySelector(".comments")
 
 //Event Listeners
 dogContainer.addEventListener("click", function(event) {
 
     if(event.target.matches(".like-button")) { 
     const dogCard = event.target.closest(".image-card")
-    // const listingId = dogCard.dataset.id
     const likesSpan = dogCard.querySelector(".likes")
 
     const newLikes = parseInt(likesSpan.textContent) + 1
@@ -26,28 +26,28 @@ dogContainer.addEventListener("click", function(event) {
     }
 });
 
-// commentForm.addEventListener("submit", function(event) {
-//     event.preventDefault()
+commentForm.addEventListener("submit", function(event) {
+    event.preventDefault()
 
-//     const newComment = {
-//         content: event.target.content.value
-//     }
+    const newComment = {
+        content: event.target.comment.value
+        }
 
-//     fetch('http://localhost:3000/comments', {
-//     method: 'POST', 
-//     headers: {
-//     'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(newComment),
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//     console.log('Success:', data);
-//     })
-//     .catch((error) => {
-//     console.error('Error:', error);
-//     });
-// }); 
+    fetch('http://localhost:3000/comments', {
+    method: 'POST', 
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+    "imageId": 1,
+    "content": newComment
+}),
+    })
+    .then(response => response.json())
+    .then(actualNewComment => {
+        postComment.innerHTML =  `<li>${actualNewComment.content}</li>`
+    });
+}); 
 
     
 //Initial Render 
