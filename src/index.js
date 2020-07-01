@@ -54,5 +54,17 @@ commentForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
   const commentsUl = imageContainer.querySelector(".comments");
-  commentsUl.innerHTML += `${event.target.comment.value} <br>`;
+  commentsUl.innerHTML += `<li>${event.target.comment.value} </li>`;
+
+  fetch("http://localhost:3000/comments", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      imageId: 1,
+      content: event.target.comment.value,
+    }),
+  });
 });
