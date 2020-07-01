@@ -113,7 +113,20 @@ function renderOneComment (element){
     const comment = document.createElement("li")
     comment.innerText = element.content
     commentList.append(comment)
+     
+    const deleteButton = document.createElement("button")
+    comment.append(deleteButton)
+    deleteButton.classList = "delete-button"
+    deleteButton.innerText = "delete"
 
+    deleteButton.addEventListener("click", () => {
+        comment.remove()
+
+        fetch(`http://localhost:3000/comments/${element.id}`,{
+            method: 'DELETE'
+        })
+        
+    })
 }
 //Advanced Deliverables
 const downVote = document.createElement("button")
