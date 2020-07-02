@@ -1,21 +1,21 @@
 // write your code here
 document.addEventListener("DOMContentLoaded", (event) => {
     fetchImage();
-    fetchComments()
+    fetchComments();
 })
 
 function fetchImage() {
-   fetch('http://localhost:3000/images')
+   fetch('http://localhost:3000/images/1')
     .then(resp => resp.json())
     .then(data => renderImage(data)) 
 } 
 
 
-function renderImage(images) {
+function renderImage(image) {
     let card = document.querySelector('.image-card')
     // let h2Title = document.querySelector('.title')
     // let pic = document.querySelector('img')
-    images.forEach(image => {
+    // images.forEach(image => {
         card.innerHTML = `
         <h2>${image.title}</h2>
         <img src="${image.image}" class="image" />
@@ -46,19 +46,62 @@ function renderImage(images) {
 
             let likesSpan = document.querySelector('span')
             image.likes = image.likes + 1
-            likesSpan.innerText = `${image.likes} likes`
+            likesSpan.innerText = `${image.likes} likes` 
             
-            // likesDiv.appendChild(likesSpan)
-            // not working like I would hope
-            
-            
-            // fetch('http://localhost:3000/images')
-            // method post
-            // Know I want to use something like this not sure how to find it
+            const likeObj = {
+                likes: image.likes
+            }
 
-        })
-    });
-}
+           console.log(likeObj)
+
+            fetch('http://localhost:3000/images/1', {
+            method: "PATCH", 
+            // use patch to update an existing object
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(likeObj),
+                
+            })
+            
+            
+            })
+
+            let commentForm = document.querySelector('.comment-form')
+            commentForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            console.log(commentForm.comment.value)
+            let cList = document.querySelector('.comments')
+            let newLi = document.createElement('li')
+             newLi.innerText = commentForm.comment.value
+            
+
+            const cObj = {
+                imageId: image.id,
+                content: commentForm.comment.value
+            }
+
+            fetch('http://localhost:3000/comments', {
+            method: "POST", 
+            // use post to add a new object
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(cObj),
+                
+            })
+            .then(response => response.json())
+            .then(cObj => {
+             renderComment(cObj);
+            })
+            
+            
+
+
+            })
+        }
+    
+
 
 
 
@@ -67,7 +110,7 @@ function fetchComments() {
      .then(resp => resp.json())
      .then(data => renderComments(data)) 
  } 
- 
+
  
  function renderComments(comments) {
      let commentsUl = document.querySelector('.comments')
@@ -83,4 +126,12 @@ function fetchComments() {
  }
 
 
+
+function renderComment(comment) {
+    let commentsUl = document.querySelector('.comments')
+    let commentLi = document.createElement('li')
+        commentLi.innerText = comment.content
+
+        commentsUl.appendChild(commentLi)
+}
 
